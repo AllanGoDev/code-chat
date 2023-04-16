@@ -1,0 +1,57 @@
+version: '3.3'
+
+services:
+  chat:
+    container_name: codechat_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: dockerize -wait tcp://mongodb:27017 -timeout 120s sh /var/www/docker-entrypoint.sh
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - /data/instances:/var/www/instances
+      - ./:/var/www
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - codechat-net
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - /data/instances:/var/www/instances
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - codechat-net
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    volumes:
+      - /data/mongodb:/data/db
+    ports:
+      - 26712:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: DhxTJAA0RPoVTR6
+    networks:
+      - codechat-net
+    expose:
+      - 26712
+
+  # redis
+  redis:
+    image: redis:latest
+    networks:
+      - codechat-net
+
+networks:
+  codechat-net:
+    driver: bridge

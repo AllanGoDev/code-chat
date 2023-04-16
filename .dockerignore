@@ -1,0 +1,28 @@
+# Dev
+/test
+/.vs
+/.vscode
+/.github
+/.git
+
+# Docker
+/Dockerfile
+/docker-compose.yml
+/.dockerignore
+/docker.sh
+
+# Project related
+/LICENSE
+/README.md
+/.eslintignore
+/.eslintrc.js
+/.prettierrc.js
+/.gitignore
+/mongodb
+/postman.json
+/README.md
+/public
+/Docker
+/mongodb
+/start.sh
+/node_modules
